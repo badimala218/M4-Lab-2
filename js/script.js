@@ -1,3 +1,5 @@
+
+
 // CREATE AN ARRAY OF EMPLOYEES
 let initialSet = [
     [11111666, "Demon", 1666, "demon@bor.cor", "Executive"],
@@ -24,13 +26,15 @@ window.addEventListener("load", function()
 });
 
 // GET DOM ELEMENTS
+const $ = (id) => document.getElementById(id);
 let tbody = document.getElementsByTagName("tbody");
-let table = document.getElementById("empTable");
+let table = $("empTable");
+let form = $("addForm");
 
 let count = 0;
 
 // BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
-window.addEventListener("load", buildTable);
+window.addEventListener("load", buildGrid);
 
 // ADD EMPLOYEE
 form.addEventListener('submit', (e) => {
@@ -39,61 +43,87 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     // GET THE VALUES FROM THE TEXT BOXES
+    let id = $("id").value;
+    let name = $("name").value;
+    let extension = $("extension").value;
+    let email = $("email").value;
+    let department = $("department").value;
 
     // ADD THE NEW EMPLOYEE TO A NEW ARRAY OBJECT
+    let newEmployee = [];
+    newEmployee.push(id);
+    newEmployee.push(name);
+    newEmployee.push(extension);
+    newEmployee.push(email);
+    newEmployee.push(department);
 
     // PUSH THE NEW ARRAY TO THE *EXISTING* EMPLOYEES ARRAY
+    employeeArray.push(newEmployee);
 
     // BUILD THE GRID
+    buildGrid();
 
     // RESET THE FORM
+    $("id").value = "";
+    $("name").value = "";
+    $("extension").value = "";
+    $("email").value = "";
+    $("department").value = "";
 
     // SET FOCUS BACK TO THE ID TEXT BOX
+    $("id").focus();
 
 });
 
 // DELETE EMPLOYEE
 empTable.addEventListener('click', (e) => {
+    "use strict";
     // CONFIRM THE DELETE
-
+    let currentRow = e.target.parentNode.parentNode;
+    if (confirm("Delete user #" + currentRow.firstChild.innerHTML + "?"))
+    {
         // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
+        let rowIndex = currentRow.rowIndex;
 
         // REMOVE EMPLOYEE FROM ARRAY
+        delete employeeArray[rowIndex];
+        count--;
 
         // BUILD THE GRID
-
+        buildGrid();
+    }
 });
 
 // BUILD THE EMPLOYEES GRID
 function buildGrid() {
     "use strict";
     // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
-    tbody.remove();
+    tbody[0].remove();
 
     // REBUILD THE TBODY FROM SCRATCH
     tbody = document.createElement("tbody");
 
     // LOOP THROUGH THE ARRAY OF EMPLOYEES
-    for (row of employeeArray)
+    for (const row of employeeArray)
     {
         // REBUILDING THE ROW STRUCTURE
-        let newRow = document.createElement();
+        let newRow = document.createElement("tr");
         newRow.innerHTML =
-            `<tr><td>${row[0]}</td>
+            `<td>${row[0]}</td>
             <td>${row[1]}</td>
             <td>${row[2]}</td>
             <td>${row[3]}</td>
-            <td>${row[4]}</td></tr>
+            <td>${row[4]}</td>
             `;
         tbody.appendChild(newRow);
     }
 
     // BIND THE TBODY TO THE EMPLOYEE TABLE
-    table.innerHTML += tbody;
+    table.appendChild(tbody);
 
     // UPDATE EMPLOYEE COUNT
     count = tbody.childNodes.length;
 
     // STORE THE ARRAY IN STORAGE
-    localStorage.employeesArray = JSON.parse(employeeArray);
+    localStorage.employeesArray = JSON.stringify(employeeArray);
 };
