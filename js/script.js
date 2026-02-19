@@ -9,17 +9,28 @@ let initialSet = [
 
 // CHECK TO SEE IF STORAGE OBJECT EXISTS WHEN THE PAGE LOADS
 // IF DOES, RETURN STORAGE OBJECT INTO ARRAY INSTEAD OF POPULATED ARRAY
-
-
-// GET DOM ELEMENTS
-let table = document.getElementsByTagName("tbody");
-
-// BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
-var buildTable = function() 
+let employeeArray;
+window.addEventListener("load", function()
 {
     "use strict";
-    
-}
+    if (this.localStorage.employeesArray)
+    {
+        employeeArray = JSON.parse(this.localStorage.employeesArray);
+    }
+    else
+    {
+        employeeArray = initialSet;
+    }
+});
+
+// GET DOM ELEMENTS
+let tbody = document.getElementsByTagName("tbody");
+let table = document.getElementById("empTable");
+
+let count = 0;
+
+// BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
+window.addEventListener("load", buildTable);
 
 // ADD EMPLOYEE
 form.addEventListener('submit', (e) => {
@@ -55,17 +66,34 @@ empTable.addEventListener('click', (e) => {
 
 // BUILD THE EMPLOYEES GRID
 function buildGrid() {
+    "use strict";
     // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
+    tbody.remove();
 
     // REBUILD THE TBODY FROM SCRATCH
+    tbody = document.createElement("tbody");
 
     // LOOP THROUGH THE ARRAY OF EMPLOYEES
-    // REBUILDING THE ROW STRUCTURE
+    for (row of employeeArray)
+    {
+        // REBUILDING THE ROW STRUCTURE
+        let newRow = document.createElement();
+        newRow.innerHTML =
+            `<tr><td>${row[0]}</td>
+            <td>${row[1]}</td>
+            <td>${row[2]}</td>
+            <td>${row[3]}</td>
+            <td>${row[4]}</td></tr>
+            `;
+        tbody.appendChild(newRow);
+    }
 
     // BIND THE TBODY TO THE EMPLOYEE TABLE
+    table.innerHTML += tbody;
 
     // UPDATE EMPLOYEE COUNT
+    count = tbody.childNodes.length;
 
     // STORE THE ARRAY IN STORAGE
-
+    localStorage.employeesArray = JSON.parse(employeeArray);
 };
