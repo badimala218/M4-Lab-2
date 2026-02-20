@@ -3,9 +3,7 @@
 ## CS 648 Coursework
 
 ### Notes
-- It will load the inital set of employees if the localStorage array is empty.  This is for testing purposes to prove it loads.
-
-- *No Delete Buttons.* The write-up didn't mention adding delete buttons, so it will ask for delete confirmation if you *click on the row.*
+- The write-up didn't mention adding delete buttons, so it will ask for delete confirmation if you *click on the row* as well as when clicking the button.
 
 - Delete confirmation uses the employee ID.
 

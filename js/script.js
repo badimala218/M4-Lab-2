@@ -15,14 +15,14 @@ let employeeArray;
 window.addEventListener("load", function()
 {
     "use strict";
-    employeeArray = initialSet;
     if (this.localStorage.employeesArray)
     {
-        let tempArray = JSON.parse(this.localStorage.employeesArray);
-        if (tempArray.length !== 0)
-        {
-            employeeArray = tempArray;
-        }
+        employeeArray = JSON.parse(this.localStorage.employeesArray);
+
+    }
+    else 
+    {
+        employeeArray = initialSet;
     }
 });
 
@@ -83,7 +83,15 @@ empTable.addEventListener('click', (e) =>
     // CONFIRM THE DELETE
     if (e.target.tagName !== "TH")
     {
-        let currentRow = e.target.parentNode;
+        let currentRow;
+        if (e.target.tagName === "BUTTON")
+        {
+            currentRow = e.target.parentNode.parentNode;
+        }
+        else 
+        {
+            currentRow = e.target.parentNode;
+        }
         if (confirm("Delete user #" + currentRow.firstChild.innerHTML + "?"))
         {
             // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
@@ -122,7 +130,7 @@ function buildGrid() {
             <td>${row[2]}</td>
             <td>${row[3]}</td>
             <td>${row[4]}</td>
-            <td></td>
+            <td><button class="btn btn-danger">X</td>
             `;
         tbody.appendChild(newRow);
     }
